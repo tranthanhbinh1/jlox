@@ -35,6 +35,10 @@ class Scanner {
         keywords.put("while", WHILE);
     }
 
+    Scanner(String source) {
+        this.source = source;
+    }
+
     List<Token> scanTokens() {
         while (!isAtEnd()) {
             // We are at the beginning of the next lexeme.
@@ -70,10 +74,6 @@ class Scanner {
 
     private boolean isDigit(char c) {
         return c >= '0' && c <= '9';
-    }
-
-    Scanner(String source) {
-        this.source = source;
     }
 
     private void scanToken() {
@@ -129,9 +129,21 @@ class Scanner {
                     addToken(SLASH);
                 }
                 break;
+
+            case ' ':
+            case '\r':
+            case '\t':
+                // Ignore whitespace.
+                break;
+
+            case '\n':
+                line++;
+                break;
+
             case '"':
                 string();
                 break;
+
             default:
                 if (isDigit(c)) {
                     number();
